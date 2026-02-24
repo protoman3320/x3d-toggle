@@ -4,11 +4,11 @@ pkgver=0.5.0-beta
 pkgrel=1
 pkgdesc="GUI utility to toggle CCD priority on AMD Ryzen 9 X3D CPUs (9950X3D)"
 arch=('x86_64')
-url="https://github.com/your-repo/amd-x3d-toggle"
+url="https://github.com/pyrotiger/x3d-toggle"
 license=('GPL')
 depends=('bash' 'kdialog' 'polkit' 'libnotify')
 source=("x3d-control.sh"
-        "ryzen.jpeg")
+        "assets/ryzen.jpeg")
 sha256sums=('SKIP' 'SKIP')
 
 package() {
