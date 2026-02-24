@@ -19,8 +19,18 @@ System Dependencies: kdialog, polkit (pkexec), and libnotify.
 
 ## Installation & Integration
 The utility is installed system-wide. x3d_control will launch the application. To integrate the script into your Application Launcher or Dashboard, execute the installer.
+### Arch Linux / Garuda Linux (Recommended)
 
-## Bash
+For systems utilizing the `pacman` package manager, deploying via the included `PKGBUILD` is the optimal method. This compiles the utility into a native `x3d-toggle-git` package, automatically resolves dependencies, and seamlessly integrates the application launcher shortcut into your desktop environment.
+
+**Deployment Execution:**
+
+## bash
+git clone [https://github.com/pyrotiger/x3d-toggle.git](https://github.com/pyrotiger/x3d-toggle.git)
+cd x3d-toggle
+makepkg -si
+
+## bash
 cd to /path/to/folder
 chmod +x install.sh
 sudo ./install.sh
@@ -36,7 +46,7 @@ You can change the notification icon by dropping a .jpeg picture in ~/usr/share/
 ## Uninstallation
 To uninstall all binaries and assets, run the following:
 
-## Bash
+## bash
 cd to /path/to/folder
 chmod +x uninstall.sh
 sudo ./uninstall.sh
