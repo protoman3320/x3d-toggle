@@ -16,7 +16,7 @@ package() {
     install -Dm755 "${srcdir}/x3d-control.sh" "${pkgdir}/usr/bin/x3d-control"
 
     # 2. Install Assets to /usr/share
-    install -Dm644 "${srcdir}/ryzen.jpeg" "${pkgdir}/usr/share/x3d-toggle/ryzen.jpeg"
+    install -Dm644 "${srcdir}/assets/ryzen.jpeg" "${pkgdir}/usr/share/x3d-toggle/ryzen.jpeg"
 
     # 3. Create and Install Desktop Entry
     mkdir -p "${pkgdir}/usr/share/applications/"
