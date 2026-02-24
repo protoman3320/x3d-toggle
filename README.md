@@ -1,6 +1,6 @@
 # x3d-toggle
 ## AMD 3D v-Cache Technology Toggle Control - Community Edition
-A portable, high-performance utility for managing CCD priority on the AMD Ryzen 9 X3D CPUs utilizing vCache technology under Linux.
+A portable, high-performance utility for managing CCD priority on the AMD Ryzen 9 X3D CPUs utilizing vCache technology under Linux via manual control or automation.
 
 ## Overview
 This utility provides a graphical interface to the amd-x3d-vcache kernel driver. It allows for real-time manual switching of the CPU scheduler bias to optimize for specific workloads on asymmetric dual-CCD processors via a simple kdialog.
