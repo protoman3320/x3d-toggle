@@ -8,7 +8,6 @@ STEAM_DATA="$HOME/.local/share/Steam/steamapps"
 check_gaming_intent() {
     gamemoded -s | grep -q "active" && return 0
 
-    # 2. Steam/Proton (Conditional)
     if [ -d "$STEAM_DATA" ]; then
         pgrep -f "reaper|Proton|wine-preloader" > /dev/null && return 0
     fi
