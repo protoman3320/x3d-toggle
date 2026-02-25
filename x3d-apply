@@ -1,0 +1,21 @@
+#!/bin/bash
+#X3D-Control v0.6.1_beta - Secure Polkit Root Helper
+#Copyright (C) 2026 Pyrotiger
+
+TARGET=$(ls /sys/devices/platform/AMDI*/amd_x3d_mode 2>/dev/null | head -n 1)
+
+if [ -z "$TARGET" ] || [ ! -f "$TARGET" ]; then
+    exit 1
+fi
+
+REQUESTED_MODE=$1
+
+# Strict Input Validation (Sanitization)
+case "$REQUESTED_MODE" in
+    "cache"|"frequency"|"auto")
+        echo "$REQUESTED_MODE" > "$TARGET"
+        ;;
+    *)
+        exit 1
+        ;;
+esac

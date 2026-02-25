@@ -1,5 +1,5 @@
 # x3d-toggle
-### X3D-Control v0.6.0_beta - README.md
+### X3D-Control v0.6.1_beta - README.md
 ### Copyright (C) 2026 Pyrotiger
 
 ## AMD 3D v-Cache Technology Toggle Control - Community Edition
@@ -20,7 +20,7 @@ UEFI Configuration: CPPC Dynamic Preferred Cores must be set to [Driver].
 System Dependencies: kdialog, bc, polkit, procps_ng and libnotify.
 
 ### Security & Logic
-The script interfaces directly with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode via polkit. It utilizes pkexec for scoped, secure hardware writes.
+The application interfaces with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode utilizing a dedicated PolicyKit (Polkit) architecture. To ensure strict security and a seamless, password-free user experience, hardware writes are isolated to a containerized root helper script (/usr/libexec/x3d-apply). The sysfs kernel node remains strictly locked to root:root, while the helper script explicitly sanitizes and validates all inputs before securely executing the state change via pkexec. This ensures a seamless UX experience for the user.
 
 ### Automation Daemon
 This backend interface will dynamically switch the x3d v-Cache mode between cache and frequency. It is built to detect loads via the following: active game thread, active steam layer and gamemoded. It relies on loadavg for polling to toggle frequency, however this could cause a slight delay. Work is being done for next version iteration with improved detection heuristics bringing it to parity with the AMD v-Cache Technology Optimizer driver.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# X3D-Control v0.6.0_beta - Autonomous Daemon Scheduler
+#X3D-Control v0.6.1_beta - Autonomous Daemon Scheduler
 #Copyright (C) 2026 Pyrotiger
 
 TARGET=$(ls /sys/devices/platform/AMDI*/amd_x3d_mode 2>/dev/null | head -n 1)
@@ -36,7 +36,7 @@ while true; do
 
     CURRENT=$(cat "$TARGET" 2>/dev/null)
     if [[ "$CURRENT" != "$NEW_MODE" ]]; then
-        pkexec sh -c "echo $NEW_MODE > $TARGET"
+        pkexec /usr/libexec/x3d-apply "$NEW_MODE"
     fi
     sleep 3
 done

@@ -1,5 +1,5 @@
 #!/bin/bash
-# X3D-Control v0.6.0_beta - uninstall.sh
+#X3D-Control v0.6.1_beta - uninstall.sh
 #Copyright (C) 2026 Pyrotiger
 
 if [[ $EUID -ne 0 ]]; then
@@ -25,7 +25,8 @@ fi
 rm -f "$BIN_PATH"
 rm -f "/usr/bin/x3d-daemon"
 rm -f "/usr/lib/systemd/user/x3d-auto.service"
-
+rm -f "/usr/libexec/x3d-apply"
+rm -f "/usr/share/polkit-1/actions/org.x3dtoggle.policy"
 rm -rf "$ASSET_DIR"
 
 if [[ -f "$DESKTOP_FILE" ]]; then

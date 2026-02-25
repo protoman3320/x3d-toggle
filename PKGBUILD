@@ -1,9 +1,9 @@
-# Maintainer: Pyrotiger
-# X3D-Control v0.6.0_beta - PKGBUILD
+#Maintainer: Pyrotiger
+#X3D-Control v0.6.1_beta - PKGBUILD
 #Copyright (C) 2026 Pyrotiger
 
 pkgname=x3d-toggle-git
-pkgver=0.6.0_beta
+pkgver=0.6.1_beta
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
 arch=('any')
@@ -24,12 +24,17 @@ package() {
     cd "$srcdir/${pkgname%-git}"
     
     _bindir="$pkgdir/usr/bin"
+    _libexecdir="$pkgdir/usr/libexec"
     _sharedir="$pkgdir/usr/share/x3d-toggle"
+    _polkitdir="$pkgdir/usr/share/polkit-1/actions"
     _appdir="$pkgdir/usr/share/applications"
     _servicedir="$pkgdir/usr/lib/systemd/user"
-    install -dm755 "$_bindir" "$_sharedir" "$_appdir" "$_servicedir"
+
+    install -dm755 "$_bindir" "$_libexecdir" "$_sharedir" "$_appdir" "$_servicedir"
     install -Dm755 x3d-control "$_bindir/x3d-control"
     install -Dm755 x3d-daemon "$_bindir/x3d-daemon"
+    install -Dm755 x3d-apply "$_libexecdir/x3d-apply"
+    install -Dm644 org.x3dtoggle.policy "$_polkitdir/org.x3dtoggle.policy"
     install -Dm644 x3d-auto.service "$_servicedir/x3d-auto.service"
     install -Dm644 assets/ryzen.jpeg "$_sharedir/ryzen.jpeg"
     install -Dm644 LICENSE "$pkgdir/usr/share/licenses/${pkgname%-git}/LICENSE"

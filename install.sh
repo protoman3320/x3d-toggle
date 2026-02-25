@@ -1,5 +1,5 @@
 #!/bin/bash
-# X3D-Control v0.6.0_beta - install.sh
+#X3D-Control v0.6.1_beta - install.sh
 #Copyright (C) 2026 Pyrotiger
 
 if [[ $EUID -ne 0 ]]; then
@@ -17,6 +17,16 @@ DAEMON_NAME="x3d-daemon"
 ICON_NAME="ryzen.jpeg"
 SOURCE_ICON_PATH="assets/$ICON_NAME"
 DESKTOP_FILE="/usr/share/applications/x3d-control.desktop"
+HELPER_PATH="/usr/libexec/x3d-apply"
+POLKIT_DIR="/usr/share/polkit-1/actions"
+POLKIT_POLICY="org.x3dtoggle.policy"
+
+mkdir -p "/usr/libexec"
+mkdir -p "$POLKIT_DIR"
+cp "$SOURCE_DIR/x3d-apply" "$HELPER_PATH"
+chmod +x "$HELPER_PATH"
+cp "$SOURCE_DIR/$POLKIT_POLICY" "$POLKIT_DIR/$POLKIT_POLICY"
+chmod 644 "$POLKIT_DIR/$POLKIT_POLICY"
 
 mkdir -p "$ASSET_DIR"
 cp "$SOURCE_DIR/$SCRIPT_NAME" "$BIN_PATH"

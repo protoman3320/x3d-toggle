@@ -1,6 +1,6 @@
 #!/bin/bash
-# X3D-Control v0.6.0_beta - x3d-control
-# Copyright (C) 2026 Pyrotiger
+#X3D-Control v0.6.1_beta - x3d-control
+#Copyright (C) 2026 Pyrotiger
 
 TARGET=$(ls /sys/devices/platform/AMDI*/amd_x3d_mode 2>/dev/null | head -n 1)
 SERVICE_NAME="x3d-auto"
@@ -38,7 +38,7 @@ case "$RAW_CHOICE" in
         ;;
 esac
 
-if pkexec sh -c "echo $MODE > $TARGET"; then
+if pkexec /usr/libexec/x3d-apply "$MODE"; then
     ICON_PATH="/usr/share/x3d-toggle/ryzen.jpeg"
     DISPLAY_ICON=$([ -f "$ICON_PATH" ] && echo "file://$ICON_PATH" || echo "cpu")
 
