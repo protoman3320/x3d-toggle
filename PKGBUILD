@@ -1,36 +1,39 @@
 # Maintainer: Pyrotiger
+# X3D-Control v0.6.0_beta - PKGBUILD
+#Copyright (C) 2026 Pyrotiger
+
 pkgname=x3d-toggle-git
-pkgver=0.5.1-beta
+pkgver=0.6.0_beta
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
 arch=('any')
 url="https://github.com/pyrotiger/x3d-toggle"
 license=('GPL3')
-depends=('kdialog' 'polkit' 'libnotify')
+depends=('kdialog' 'polkit' 'libnotify' 'bc' 'procps-ng')
 makedepends=('git')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 source=("git+https://github.com/pyrotiger/x3d-toggle.git")
 md5sums=('SKIP')
+##pkgname=x3d-toggle
+##pkgver=1.0.0
+##source=("https://github.com/pyrotiger/x3d-toggle/archive/refs/tags/v${pkgver}.tar.gz")
+##sha256sums=('xxx') # xxx replace with actual values
 
 package() {
     cd "$srcdir/${pkgname%-git}"
     
-    # Define package deployment paths
     _bindir="$pkgdir/usr/bin"
     _sharedir="$pkgdir/usr/share/x3d-toggle"
     _appdir="$pkgdir/usr/share/applications"
-
-    # Create directory structures
-    install -dm755 "$_bindir" "$_sharedir" "$_appdir"
-
-    # Deploy primary executable
-    install -Dm755 x3d_control "$_bindir/x3d-control"
-    
-    # Deploy notification asset from the assets directory
+    _servicedir="$pkgdir/usr/lib/systemd/user"
+    install -dm755 "$_bindir" "$_sharedir" "$_appdir" "$_servicedir"
+    install -Dm755 x3d-control "$_bindir/x3d-control"
+    install -Dm755 x3d-daemon "$_bindir/x3d-daemon"
+    install -Dm644 x3d-auto.service "$_servicedir/x3d-auto.service"
     install -Dm644 assets/ryzen.jpeg "$_sharedir/ryzen.jpeg"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/${pkgname%-git}/LICENSE"
 
-    # Generate the Desktop Entry automatically
     cat <<EOF > "$_appdir/x3d-control.desktop"
 [Desktop Entry]
 Type=Application
@@ -41,8 +44,8 @@ Exec=/usr/bin/x3d-control
 Icon=/usr/share/x3d-toggle/ryzen.jpeg
 Terminal=false
 Categories=System;Settings;
-Keywords=amd;x3d;vcache;gaming;llm;
-X-KDE-Keywords=x3d,vcache,cpu,rabbit,cheetah,llm
+Keywords=amd;x3d;vcache;gaming;llm;encode;streaming;compute;workload;
+X-KDE-Keywords=x3d,vcache,cpu,rabbit,cheetah,llm,encode,streaming,compute,workload
 EOF
     chmod 644 "$_appdir/x3d-control.desktop"
 }
