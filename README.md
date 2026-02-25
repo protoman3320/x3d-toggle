@@ -10,15 +10,17 @@ This utility provides a graphical interface to the amd-x3d-vcache kernel driver.
 
 Hardware Modes
 1. Rabbit Mode (vCache / CCD0): Prioritizes the CCD equipped with 3D V-Cache. Optimized for gaming and latency-sensitive applications.
-
 2. Cheetah Mode (Frequency / CCD1): Prioritizes the high-frequency CCD. Optimized for local LLM inference, compilation, and raw compute.
-
 3. Auto: Defaults to the system driver for dynamic scheduling, conditional on kernel support. Default is CPPC bias scheduler.
+4. Restart Daemon: Restarts the daemon and persists next boot
 
 ### Prerequisites
 UEFI Configuration: CPPC Dynamic Preferred Cores must be set to [Driver].
 
 System Dependencies: kdialog, bc, polkit, procps_ng and libnotify.
+
+### Security & Logic
+The script interfaces directly with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode via polkit. It utilizes pkexec for scoped, secure hardware writes.
 
 ### Automation Daemon
 This backend interface will dynamically switch the x3d v-Cache mode between cache and frequency. It is built to detect loads via the following: active game thread, active steam layer and gamemoded. It relies on loadavg for polling to toggle frequency, however this could cause a slight delay. Work is being done for next version iteration with improved detection heuristics bringing it to parity with the AMD v-Cache Technology Optimizer driver.
@@ -50,9 +52,6 @@ sudo ./install.sh
 
 Search for "X3D CCD Control" in your launcher to engage or launch directly from terminal by typing `x3d-control`. Accepted keywords are x3d, vcache, cpu, rabbit, cheetah, llm, encode, streaming, workload and compute.
 
-### Security & Logic
-The script interfaces directly with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode via polkit. It utilizes systemd-tmpfiles for scoped, secure hardware writes.
-
 ### Notification Customization
 You can change the notification icon by dropping a .jpeg picture in /usr/share/x3d-toggle and renaming it to ryzen.jpeg, replacing the one in the directory.
 
@@ -72,7 +71,7 @@ sudo ./uninstall.sh
 * **Warranty Voidance:** Manipulating CPU hardware states, frequencies, or standard driver behaviors outside of default operational parameters may void your processor or motherboard manufacturer warranties.
 * **No Warranty:** This software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. 
 * **Indemnification:** The author and contributors shall not be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, hardware degradation, catastrophic system failure, data loss, or thermal issues) arising in any way out of the use of this software, even if advised of the possibility of such damage.
-* **Trademark** AMD, Ryzen, and 3D V-Cache are trademarks of Advanced Micro Devices, Inc. This project is an independent community-led utility and is not affiliated with, endorsed by, or sponsored by AMD.
+* **Trademark:** AMD, Ryzen, and 3D V-Cache are trademarks of Advanced Micro Devices, Inc. This project is an independent community-led utility and is not affiliated with, endorsed by, or sponsored by AMD.
 
 Live Long and Prosper
 
