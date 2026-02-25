@@ -1,5 +1,5 @@
 [Unit]
-Description=AMD X3D VCACHE Technology Autonomous Scheduler
+Description=AMD X3D VCACHE Technology Autonomous Daemon Scheduler
 ConditionPathExists=/usr/bin/x3d-daemon
 After=graphical-session.target
 
