@@ -31,7 +31,7 @@ Modern Linux kernels often struggle with the "Dual-CCD Paradox." On processors l
 * UEFI Configuration: CPPC Dynamic Preferred Cores must be set to [Driver].
 * System Dependencies: kdialog, bc, polkit, procps-ng and libnotify.
 
-### 🛡️  Architecture & Security   🛡️
+### 🛡️  Architecture Security   🛡️
 The utility interfaces with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode via a dedicated PolicyKit (Polkit) architecture.
 * Isolation: Hardware writes are restricted to a containerized root helper script (/usr/libexec/x3d-apply). 🔒
 * Permissions: The sysfs kernel node remains locked to root:root. 🔒
@@ -40,7 +40,7 @@ The utility interfaces with the sysfs node at /sys/devices/platform/AMDI*/amd_x3
 ### 🛰️⚡  Automation Daemon (x3d-auto)  ⚡🤖
 The backend daemon dynamically toggles between Cache, Frequency, and Auto (Driver default) modes by monitoring:
 * Gaming Signatures: Active game threads, Steam overlay layers, and gamemode status.
-* Compute Loads: System load averages trigger Frequency mode for heavy multi-threaded tasks.
+* Compute Loads: System load averages trigger Frequency mode for heavy multi-threaded tasks. Customizable, see below.
 * Efficiency: Defaults to Auto for standard desktop workloads.
 
 >[!TIP]
