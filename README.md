@@ -85,8 +85,8 @@ GPLv3
 ```bash
 git clone https://github.com/pyrotiger/x3d-toggle.git
 cd x3d-toggle
-chmod +x install.sh
-sudo ./install.sh
+make
+sudo make install
 ```
 ### 🚀  Usage  🚀
 * Launch the GUI/Interface via your application launcher (search for "X3D CCD Control") or execute via terminal:
@@ -115,8 +115,7 @@ To uninstall all binaries and assets, run the following:
 
 ```bash
 cd to /path/to/folder/x3d-toggle
-chmod +x uninstall.sh
-sudo ./uninstall.sh
+sudo make uninstall
 ```
 ### 🤝  Credits & Acknowledgments  🤝
 GrandBIRDLizard — For critical technical insights on sysfs node utilization, GPU IRQ management, and architectural guidance. Author of [X3Dctl](https://github.com/GrandBIRDLizard/x3dctl).
