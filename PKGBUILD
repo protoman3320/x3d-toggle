@@ -3,13 +3,17 @@
 #Copyright (C) 2026 Pyrotiger
 
 pkgname=x3d-toggle-git
-pkgver=0.6.4_beta
+pkgver=v0.6.4_beta.r8.g4961177
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
 arch=('any')
 url="https://github.com/pyrotiger/x3d-toggle"
 license=('GPL3')
-depends=('kdialog' 'polkit' 'libnotify' 'bc' 'procps-ng')
+depends=('kdialog' 'polkit' 'libnotify' 'procps-ng')
+optdepends=('gamemode: For GameMode integration' 
+            'steam: For Steam game detection' 
+            'wine: For Windows game compatibility' 
+            'proton: For Steam Play compatibility')
 makedepends=('git')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
@@ -20,34 +24,16 @@ md5sums=('SKIP')
 ##source=("https://github.com/pyrotiger/x3d-toggle/archive/refs/tags/v${pkgver}.tar.gz")
 ##sha256sums=('xxx') # xxx replace with actual values
 
-package() {
+backup=('etc/x3d-toggle.conf')
+install='x3d-toggle.install'
+
+pkgver() {
     cd "$srcdir/${pkgname%-git}"
-    
-    _bindir="$pkgdir/usr/bin"
-    _libexecdir="$pkgdir/usr/libexec"
-    _sharedir="$pkgdir/usr/share/x3d-toggle"
-    _polkitdir="$pkgdir/usr/share/polkit-1/actions"
-    _appdir="$pkgdir/usr/share/applications"
-    _servicedir="$pkgdir/usr/lib/systemd/user"
-    _confdir="$pkgdir/etc"
+    git describe --long --tags 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
 
-    mkdir -p "$_bindir"
-    mkdir -p "$_libexecdir"
-    mkdir -p "$_sharedir"
-    mkdir -p "$_polkitdir"
-    mkdir -p "$_appdir"
-    mkdir -p "$_servicedir"
-    mkdir -p "$_confdir"
-
-    install -m 755 "$srcdir/${pkgname%-git}/x3d-control" "$_bindir/x3d-control"
-    install -m 755 "$srcdir/${pkgname%-git}/x3d-daemon" "$_bindir/x3d-daemon"
-    install -m 755 "$srcdir/${pkgname%-git}/x3d-apply" "$_libexecdir/x3d-apply"
-    install -m 644 "$srcdir/${pkgname%-git}/assets/ryzen.jpeg" "$_sharedir/ryzen.jpeg"
-    install -m 644 "$srcdir/${pkgname%-git}/org.x3dtoggle.policy" "$_polkitdir/org.x3dtoggle.policy"
-    install -m 644 "$srcdir/${pkgname%-git}/x3d-toggle.conf" "$_confdir/x3d-toggle.conf"
-    install -m 644 "$srcdir/${pkgname%-git}/x3d-auto.service" "$_servicedir/x3d-auto.service"
-
-    cat <<EOF > "$_appdir/x3d-control.desktop"
+prepare() {
+    cat <<EOF > "x3d-control.desktop"
 [Desktop Entry]
 Type=Application
 Name=X3D CCD Toggle
@@ -60,5 +46,18 @@ Categories=System;Settings;
 Keywords=amd;x3d;vcache;gaming;llm;encode;streaming;compute;workload;
 X-KDE-Keywords=x3d,vcache,cpu,rabbit,cheetah,llm,encode,streaming,compute,workload
 EOF
-    chmod 644 "$_appdir/x3d-control.desktop"
+}
+
+package() {
+    cd "$srcdir/${pkgname%-git}"
+    
+    install -Dm755 "x3d-control" "$pkgdir/usr/bin/x3d-control"
+    install -Dm755 "x3d-daemon" "$pkgdir/usr/bin/x3d-daemon"
+    install -Dm755 "x3d-apply" "$pkgdir/usr/libexec/x3d-apply"
+    install -Dm644 "assets/ryzen.jpeg" "$pkgdir/usr/share/x3d-toggle/ryzen.jpeg"
+    install -Dm644 "org.x3dtoggle.policy" "$pkgdir/usr/share/polkit-1/actions/org.x3dtoggle.policy"
+    install -Dm644 "x3d-toggle.conf" "$pkgdir/etc/x3d-toggle.conf"
+    install -Dm644 "x3d-auto.service" "$pkgdir/usr/lib/systemd/user/x3d-auto.service"
+    install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 "$srcdir/x3d-control.desktop" "$pkgdir/usr/share/applications/x3d-control.desktop"
 }

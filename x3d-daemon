@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #X3D-Control v0.6.4_beta - Autonomous Daemon Scheduler
 #Copyright (C) 2026 Pyrotiger
 
@@ -36,11 +36,10 @@ CACHE_COUNTER=0
 
 refresh_game_cache() {
     if [[ "${GAME_DETECTION_MODE:-2}" == "2" ]]; then
-        GAME_EXECS="|"$(find /usr/share/applications -name "*.desktop" -print0 2>/dev/null | xargs -0 grep -l "Categories=.*Game" 2>/dev/null | xargs -d '\n' grep "^Exec=" 2>/dev/null | sed 's/^Exec=\([^ ]*\).*$/\1/' | xargs -n 1 basename 2>/dev/null | sort -u | tr '\n' '|')
+        GAME_EXECS="|"$(find /usr/share/applications -name "*.desktop" -print0 2>/dev/null | xargs -0 grep -l "Categories=.*Game" 2>/dev/null | xargs -d '\n' grep -h "^Exec=" 2>/dev/null | sed 's/^Exec=\([^ ]*\).*$/\1/' | xargs -n 1 basename 2>/dev/null | sort -u | tr '\n' '|')
     fi
 }
 
-# Initial cache load
 refresh_game_cache
 
 check_gaming_intent() {
@@ -64,8 +63,7 @@ check_gaming_intent() {
 }
 
 check_compute_intent() {
-    LOAD=$(awk '{print $1}' /proc/loadavg)
-    if [ "$(echo "$LOAD > $COMPUTE_LOAD_THRESHOLD" | bc -l)" -eq 1 ]; then
+    if awk -v threshold="$COMPUTE_LOAD_THRESHOLD" '{ exit !($1 > threshold) }' /proc/loadavg; then
         return 0
     fi
     return 1

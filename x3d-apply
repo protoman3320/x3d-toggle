@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #X3D-Control v0.6.4_beta - Secure Polkit Root Helper
 #Copyright (C) 2026 Pyrotiger
 
@@ -10,7 +10,6 @@ fi
 
 REQUESTED_MODE=$1
 
-# Strict Input Validation (Sanitization)
 case "$REQUESTED_MODE" in
     "cache"|"frequency"|"auto")
         if ! printf "%s" "$REQUESTED_MODE" > "$TARGET"; then

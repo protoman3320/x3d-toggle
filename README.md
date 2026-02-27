@@ -29,7 +29,7 @@ Modern Linux kernels often struggle with the "Dual-CCD Paradox." On processors l
 
 ### 📜  Prerequisites  📜
 * UEFI Configuration: CPPC Dynamic Preferred Cores must be set to [Driver].
-* System Dependencies: kdialog, bc, polkit, procps-ng and libnotify.
+* System Dependencies: kdialog, polkit, procps-ng and libnotify.
 
 ### 🛡️  Architecture Security   🛡️
 The utility interfaces with the sysfs node at /sys/devices/platform/AMDI*/amd_x3d_mode via a dedicated PolicyKit (Polkit) architecture.
@@ -97,7 +97,7 @@ chmod +x uninstall.sh
 sudo ./uninstall.sh
 ```
 ### 🤝  Credits & Acknowledgments  🤝
-GrandBIRDLizard — For critical technical insights on sysfs node utilization, GPU IRQ management, and architectural guidance on shifting from loadavg to high-performance event-driven logic. Author of [X3Dctl](https://github.com/GrandBIRDLizard/x3dctl).
+GrandBIRDLizard — For critical technical insights on sysfs node utilization, GPU IRQ management, and architectural guidance. Author of [X3Dctl](https://github.com/GrandBIRDLizard/x3dctl).
 
 ### ⚖️  Legal Disclaimer & Liability Limitation  ⚖️
 

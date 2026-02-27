@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #X3D-Control v0.6.4_beta - uninstall.sh
 #Copyright (C) 2026 Pyrotiger
 
@@ -28,13 +28,17 @@ rm -f "/usr/lib/systemd/user/x3d-auto.service"
 rm -f "/usr/libexec/x3d-apply"
 rm -f "/usr/share/polkit-1/actions/org.x3dtoggle.policy"
 rm -f "/etc/x3d-toggle.conf"
-rm -rf "$ASSET_DIR"
+
+if [[ -n "$ASSET_DIR" ]] && [[ "$ASSET_DIR" == "/usr/share/x3d-toggle" ]]; then
+    rm -rf "$ASSET_DIR"
+fi
 
 if [[ -f "$DESKTOP_FILE" ]]; then
     rm -f "$DESKTOP_FILE"
-    update-desktop-database /usr/share/applications/ 2>/dev/null
-    echo "Removed application launcher entry."
 fi
+
+update-desktop-database /usr/share/applications/ 2>/dev/null
+echo "Refreshed application launcher database."
 
 if [[ -n "$SUDO_USER" ]]; then
     REAL_USER_HOME=$(eval echo "~$SUDO_USER")

@@ -18,6 +18,6 @@ Contributions must integrate seamlessly with the established PolicyKit (Polkit) 
 
 ## 4. Pull Request Protocol
 1.  Apply deductive reasoning to the PR description. Identify the structural vulnerability or logic flaw before detailing the patch.
-2.  Provide terminal outputs confirming script dependency checks (`kdialog`, `bc`, `gamemoded`) pass successfully on initialization.
+2.  Provide terminal outputs confirming script dependency checks (`kdialog`, `gamemoded`) pass successfully on initialization.
 3.  If the patch alters operational behavior, include the exit status logs of the Polkit helper executing the state change.
 4.  Maintain version parity. If the commit advances the release, update version string headers across all bash files, `README.md`, and the `PKGBUILD` array.

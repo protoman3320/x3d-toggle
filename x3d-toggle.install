@@ -1,0 +1,21 @@
+post_install() {
+    echo ""
+    echo ":: x3d-toggle-git has been installed."
+    echo "   To enable the automatic CCD scheduler daemon for your user, run:"
+    echo "     systemctl --user enable --now x3d-auto.service"
+    echo ""
+    echo "   To configure thresholds and polling intervals, edit:"
+    echo "     /etc/x3d-toggle.conf"
+    echo ""
+}
+
+post_upgrade() {
+    post_install
+}
+
+post_remove() {
+    echo ""
+    echo ":: Remember to disable the user service if it is still running:"
+    echo "     systemctl --user disable --now x3d-auto.service"
+    echo ""
+}

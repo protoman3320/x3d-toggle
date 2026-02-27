@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #X3D-Control v0.6.4_beta - install.sh
 #Copyright (C) 2026 Pyrotiger
+
+set -e # Exit on error
 
 if [[ $EUID -ne 0 ]]; then
    echo "Error: This installer must be run with sudo."
    exit 1
 fi
 
-REQUIRED_CMDS="bc kdialog notify-send pkexec ps pgrep awk cat tr find grep sed"
+REQUIRED_CMDS="kdialog notify-send pkexec ps pgrep awk cat tr find grep sed"
 MISSING_DEPS=0
 
 for cmd in $REQUIRED_CMDS; do
@@ -22,10 +24,10 @@ if [ $MISSING_DEPS -eq 1 ]; then
     echo "Please install missing dependencies and run the installer again."
     echo ""
     echo "On Arch/Garuda Linux:"
-    echo "  sudo pacman -S polkit kdialog libnotify bc procps-ng"
+    echo "  sudo pacman -S polkit kdialog libnotify procps-ng"
     echo ""
     echo "On Debian/Ubuntu:"
-    echo "  sudo apt-get install polkit kdebase-runtime libnotify-bin bc procps"
+    echo "  sudo apt-get install polkit kdebase-runtime libnotify-bin procps"
     echo ""
     exit 1
 fi
@@ -61,7 +63,6 @@ if [ -f "$SOURCE_DIR/$SOURCE_ICON_PATH" ]; then
     install -m 644 "$SOURCE_DIR/$SOURCE_ICON_PATH" "$ASSET_DIR/$ICON_NAME"
 fi
 
-# Install default config if not present
 if [ ! -f "$CONFIG_PATH" ]; then
     install -m 644 "$SOURCE_DIR/x3d-toggle.conf" "$CONFIG_PATH"
 fi
