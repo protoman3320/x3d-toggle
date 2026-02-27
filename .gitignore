@@ -5,3 +5,4 @@ src/
 *.pkg.tar.*
 *.pkg.tar.*.sig
 x3d-toggle/
+.vscode/
