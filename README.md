@@ -52,7 +52,7 @@ The core logic is handled by `x3d-toggle-c`:
 ```bash
 sudo x3d-toggle-c cache       # Rabbit Mode (Gaming) 🐰
 sudo x3d-toggle-c frequency   # Cheetah Mode (Compute) 🐆
-sudo x3d-toggle-c auto        # Elk Mode (Driver Default)
+sudo x3d-toggle-c auto        # Elk Mode (Driver Default) 🦌
 x3d-toggle-c get              # Check current mode
 ```
 
