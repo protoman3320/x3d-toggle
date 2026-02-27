@@ -13,6 +13,7 @@ This major release marks a complete architectural rewrite of the core logic, tra
 *   **Configuration:** `COMPUTE_LOAD_THRESHOLD` now accepts an integer percentage (Default: `50` for 50% CPU usage) instead of a load average float.
 *   **Build System:** Added a standard `Makefile` for building and installing the full suite.
 *   **Packaging:** Updated `PKGBUILD` to compile from source.
+*   **Security:** Hardened security protocols and added buffer overflow protections
 
 ## 🗑️ Removed
 *   Removed `x3d-apply` (Bash implementation).
