@@ -1,0 +1,12 @@
+# pack-refs with: peeled fully-peeled sorted 
+b558dec44e3e2b1770fd464e902395afdcb956a3 refs/heads/main
+40253d59af9005d650433dc71a59d5ae2ea56390 refs/heads/main-bash
+fe789daa139785b9697dd891039d5fa193afa08b refs/heads/x3d-toggle-c
+94ef91645fb91c8074ea2d33fcb1048277bc3b42 refs/tags/v0.6.3_beta
+9052c4bc2e7dc84e2aaea464c2414534a6acf84d refs/tags/v0.6.4_beta
+c663d7ecb84c61b07ea911530c8bbd98248badbf refs/tags/x3d
+67d754c77d7a78e8ae9d05a71618b12dd645c90a refs/tags/x3d-v.0.6.1_beta
+146f666a4d2e4e2b01638b9e55199fb0727f8c5d refs/tags/x3d-v0.5.1beta
+0add2353edc8a5494adfe77124dd887f490be2c9 refs/tags/x3d-v0.6.0_beta
+e2f322f5029b3f2cf021346396e260e7f010a557 refs/tags/x3d-v0.6.2_beta
+570c7f3d8bce7ca9ac5f66687f76e001e33cfe24 refs/tags/x3d-v1.0.0

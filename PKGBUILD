@@ -3,18 +3,19 @@
 #Copyright (C) 2026 Pyrotiger
 
 pkgname=x3d-toggle-git
-pkgver=v1.0.0
+pkgver=v1.0.0.r67.gb558dec
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
-arch=('any')
+arch=('x86_64')
 url="https://github.com/pyrotiger/x3d-toggle"
-license=('GPL3')
+license=('GPL-3.0-only')
 depends=('kdialog' 'polkit' 'libnotify' 'procps-ng')
 optdepends=('gamemode: For GameMode integration' 
             'steam: For Steam game detection' 
             'wine: For Windows game compatibility' 
             'proton: For Steam Play compatibility')
 makedepends=('git')
+options=('!debug')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 source=("git+https://github.com/pyrotiger/x3d-toggle.git")
@@ -28,11 +29,12 @@ backup=('etc/x3d-toggle.conf')
 install='x3d-toggle.install'
 
 pkgver() {
-    cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}" || return 1
     printf "v%s.r%s.g%s" "$(grep -Po 'VERSION "\K[^"]*' x3d-toggle.c)" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
+    cd "$srcdir/${pkgname%-git}" || return 1
     cat <<EOF > "x3d-toggle-gui.desktop"
 [Desktop Entry]
 Type=Application
@@ -49,12 +51,12 @@ EOF
 }
 
 build() {
-    cd "$srcdir/${pkgname%-git}"
-    make PREFIX=/usr
+    cd "$srcdir/${pkgname%-git}" || return 1
+    make PREFIX=/usr CPPFLAGS="$CPPFLAGS" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 }
 
 package() {
-    cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}" || return 1
     
     install -Dm755 "x3d-toggle-c" "$pkgdir/usr/bin/x3d-toggle-c"
     install -Dm755 "x3d-toggle-gui" "$pkgdir/usr/bin/x3d-toggle-gui"
@@ -64,5 +66,5 @@ package() {
     install -Dm644 "x3d-toggle.conf" "$pkgdir/etc/x3d-toggle.conf"
     install -Dm644 "x3d-auto.service" "$pkgdir/usr/lib/systemd/user/x3d-auto.service"
     install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-    install -Dm644 "$srcdir/x3d-toggle-gui.desktop" "$pkgdir/usr/share/applications/x3d-toggle-gui.desktop"
+    install -Dm644 "x3d-toggle-gui.desktop" "$pkgdir/usr/share/applications/x3d-toggle-gui.desktop"
 }

@@ -11,22 +11,43 @@ if ! x3d-toggle-c get &>/dev/null; then
 fi
 
 CONFIG_FILE="${X3D_CONFIG_FILE:-/etc/x3d-toggle.conf}"
-if [ -f "$CONFIG_FILE" ]; then
-    if ! source "$CONFIG_FILE" 2>/dev/null; then
-        echo "Warning: Config file syntax error. Using defaults." >&2
-        POLL_INTERVAL=3
-        COMPUTE_LOAD_THRESHOLD=8.0
-        GAME_DETECTION_MODE=2
-    fi
-else
-    POLL_INTERVAL=3
-    COMPUTE_LOAD_THRESHOLD=8.0
-    GAME_DETECTION_MODE=2
-fi
+POLL_INTERVAL=3
+COMPUTE_LOAD_THRESHOLD=50
+GAME_DETECTION_MODE=2
+
+load_config() {
+    [ -f "$CONFIG_FILE" ] || return 0
+
+    while IFS= read -r line || [ -n "$line" ]; do
+        line="${line%%#*}"
+        line="${line%%$'\r'}"
+        [[ -z "${line//[[:space:]]/}" ]] && continue
+
+        if [[ "$line" =~ ^[[:space:]]*POLL_INTERVAL[[:space:]]*=[[:space:]]*([0-9]+)[[:space:]]*$ ]]; then
+            POLL_INTERVAL="${BASH_REMATCH[1]}"
+        elif [[ "$line" =~ ^[[:space:]]*COMPUTE_LOAD_THRESHOLD[[:space:]]*=[[:space:]]*([0-9]+)[[:space:]]*$ ]]; then
+            COMPUTE_LOAD_THRESHOLD="${BASH_REMATCH[1]}"
+        elif [[ "$line" =~ ^[[:space:]]*GAME_DETECTION_MODE[[:space:]]*=[[:space:]]*([0-9]+)[[:space:]]*$ ]]; then
+            GAME_DETECTION_MODE="${BASH_REMATCH[1]}"
+        fi
+    done < "$CONFIG_FILE"
+}
+
+load_config
 
 if ! [[ $POLL_INTERVAL =~ ^[0-9]+$ ]] || [ "$POLL_INTERVAL" -lt 1 ]; then
     echo "Warning: Invalid POLL_INTERVAL value. Resetting to default (3s)." >&2
     POLL_INTERVAL=3
+fi
+
+if ! [[ $COMPUTE_LOAD_THRESHOLD =~ ^[0-9]+$ ]] || [ "$COMPUTE_LOAD_THRESHOLD" -lt 10 ] || [ "$COMPUTE_LOAD_THRESHOLD" -gt 90 ]; then
+    echo "Warning: Invalid COMPUTE_LOAD_THRESHOLD value. Resetting to default (50)." >&2
+    COMPUTE_LOAD_THRESHOLD=50
+fi
+
+if ! [[ $GAME_DETECTION_MODE =~ ^[0-9]+$ ]] || { [ "$GAME_DETECTION_MODE" -ne 1 ] && [ "$GAME_DETECTION_MODE" -ne 2 ]; }; then
+    echo "Warning: Invalid GAME_DETECTION_MODE value. Resetting to default (2)." >&2
+    GAME_DETECTION_MODE=2
 fi
 
 GAME_EXECS=""
@@ -63,9 +84,6 @@ check_gaming_intent() {
 
 check_compute_intent() {
     local threshold="${COMPUTE_LOAD_THRESHOLD:-50}"
-    if [[ "$threshold" == *"."* ]]; then
-       threshold=50
-    fi
     
     if x3d-toggle-c check-load "$threshold"; then
         return 0
@@ -93,7 +111,7 @@ while true; do
 
     CURRENT=$(x3d-toggle-c get 2>/dev/null)
     if [[ "$CURRENT" != "$NEW_MODE" ]]; then
-        if ! pkexec x3d-toggle-c "$NEW_MODE" 2>/dev/null; then
+        if ! pkexec /usr/bin/x3d-toggle-c "$NEW_MODE" 2>/dev/null; then
             NOW=$(date +%s)
             if (( NOW - LAST_ERROR_TIME > ERROR_COOLDOWN )); then
                 if command -v notify-send &> /dev/null; then

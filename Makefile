@@ -1,5 +1,9 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
+CC ?= gcc
+CPPFLAGS ?=
+CFLAGS ?= -O2
+LDFLAGS ?=
+HARDEN_CFLAGS = -Wall -Wextra
+HARDEN_LDFLAGS = -Wl,-z,relro,-z,now
 TARGET = x3d-toggle-c
 SRC = x3d-toggle.c
 PREFIX = /usr
@@ -14,7 +18,7 @@ LICENSESDIR = $(DESTDIR)$(PREFIX)/share/licenses/x3d-toggle
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(HARDEN_CFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS) $(HARDEN_LDFLAGS)
 
 clean:
 	rm -f $(TARGET)

@@ -48,7 +48,9 @@ int find_file_cb(const char *fpath, const struct stat *sb, int typeflag, struct 
 
 char *find_x3d_mode_file() {
     found_path = NULL;
-    nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS);
+    if (nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS) == -1) {
+        return NULL;
+    }
     return found_path;
 }
 
@@ -163,7 +165,13 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[1], "check-load") == 0) {
         int threshold = 50;
         if (argc > 2) {
-            threshold = atoi(argv[2]);
+            char *endptr = NULL;
+            long parsed = strtol(argv[2], &endptr, 10);
+            if (endptr == argv[2] || *endptr != '\0' || parsed < 0 || parsed > 100) {
+                fprintf(stderr, "Error: threshold must be an integer between 0 and 100.\n");
+                return 1;
+            }
+            threshold = (int)parsed;
         }
         if (check_compute_load(threshold, 200)) {
             return 0; // Success (Load is high)

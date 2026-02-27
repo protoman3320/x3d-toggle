@@ -28,6 +28,18 @@ if [ -z "$CURRENT_MODE" ]; then
     CURRENT_MODE="unknown"
 fi
 
+CACHE_SELECTED="off"
+FREQ_SELECTED="off"
+AUTO_SELECTED="off"
+
+if [[ "$CURRENT_MODE" == "cache" ]]; then
+    CACHE_SELECTED="on"
+elif [[ "$CURRENT_MODE" == "frequency" ]]; then
+    FREQ_SELECTED="on"
+elif [[ "$CURRENT_MODE" == "auto" ]]; then
+    AUTO_SELECTED="on"
+fi
+
 if systemctl --user is-active --quiet "$SERVICE_NAME"; then
     DAEMON_STATUS="RUNNING"
 else
@@ -36,9 +48,9 @@ fi
 
 RAW_CHOICE=$(kdialog --title "AMD X3D VCACHE Technology Control" --radiolist \
     "Hardware: <font color='#3daee9'><b>${CURRENT_MODE^^}</b></font> | Daemon: <font color='#1cdc9a'><b>$DAEMON_STATUS</b></font><br><br>Select Mode:" 0 0 0 \
-    "cache" "Rabbit Mode (Gaming/Low Latency - CCD0)" $([[ "$CURRENT_MODE" == "cache" ]] && echo "on" || echo "off") \
-    "frequency" "Cheetah Mode (LLM/Raw Compute - CCD1)" $([[ "$CURRENT_MODE" == "frequency" ]] && echo "on" || echo "off") \
-    "auto" "Default Scheduler (Disable Automation)" $([[ "$CURRENT_MODE" == "auto" ]] && echo "on" || echo "off") \
+    "cache" "Rabbit Mode (Gaming/Low Latency - CCD0)" "$CACHE_SELECTED" \
+    "frequency" "Cheetah Mode (LLM/Raw Compute - CCD1)" "$FREQ_SELECTED" \
+    "auto" "Default Scheduler (Disable Automation)" "$AUTO_SELECTED" \
     "restart_daemon" "Restart/Enable Automation Daemon" "off")
 
 [ -z "$RAW_CHOICE" ] && exit 0
@@ -58,7 +70,7 @@ case "$RAW_CHOICE" in
         ;;
 esac
 
-pkexec x3d-toggle-c "$MODE"
+pkexec /usr/bin/x3d-toggle-c "$MODE"
 EXIT_STATUS=$?
 
 if [ $EXIT_STATUS -eq 0 ]; then
