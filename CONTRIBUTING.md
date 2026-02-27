@@ -1,4 +1,4 @@
-# Contributing to X3D-Control
+# Contributing to X3D-Toggle
 
 ## 1. Architectural Objective
 Contributions must integrate seamlessly with the established PolicyKit (Polkit) security framework. Hardware state modifications are now handled by the **C binary** (`x3d-toggle-c`).

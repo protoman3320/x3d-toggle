@@ -1,5 +1,5 @@
 #Maintainer: Pyrotiger
-#X3D-Control v1.0.0 - PKGBUILD
+#X3D-Toggle v1.0.0 - PKGBUILD
 #Copyright (C) 2026 Pyrotiger
 
 pkgname=x3d-toggle-git

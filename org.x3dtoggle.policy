@@ -3,7 +3,7 @@
  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
-  <vendor>X3D-control</vendor>
+  <vendor>X3D-Toggle</vendor>
   <vendor_url>https://github.com/pyrotiger/x3d-toggle</vendor_url>
   
   <action id="org.x3dtoggle.apply">

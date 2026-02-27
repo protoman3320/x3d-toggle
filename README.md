@@ -1,5 +1,5 @@
 # x3d-toggle (C Implementation)
-### X3D-Control v1.0.0 - README.md
+### X3D-Toggle v1.0.0 - README.md
 ### Copyright ©️ 2026 Pyrotiger
 
 ## AMD 3D v-Cache Technology Toggle Control - Community Edition

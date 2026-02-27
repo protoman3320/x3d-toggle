@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#X3D-Control v1.0.0 - x3d-control
+#X3D-Toggle v1.0.0 - x3d-control
 #Copyright (C) 2026 Pyrotiger
 
 notify_user() {
@@ -14,7 +14,7 @@ SERVICE_NAME="x3d-auto"
 
 if ! command -v kdialog &> /dev/null; then
     echo "Error: kdialog is required but not installed." >&2
-    notify_user "X3D Control Error" "kdialog dependency missing."
+    notify_user "X3D Toggle Error" "kdialog dependency missing."
     exit 1
 fi
 
@@ -48,12 +48,12 @@ case "$RAW_CHOICE" in
         MODE="$RAW_CHOICE"
         if systemctl --user is-active --quiet "$SERVICE_NAME"; then
             systemctl --user stop "$SERVICE_NAME"
-            notify_user "X3D Control" "Manual mode engaged. Automation Daemon paused."
+            notify_user "X3D Toggle" "Manual mode engaged. Automation Daemon paused."
         fi
         ;;
     "restart_daemon")
         systemctl --user enable --now "$SERVICE_NAME"
-        notify_user "X3D Control" "Automation Daemon restarted and enabled."
+        notify_user "X3D Toggle" "Automation Daemon restarted and enabled."
         exit 0
         ;;
 esac
