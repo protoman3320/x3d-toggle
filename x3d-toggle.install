@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 post_install() {
     echo ""
     echo ":: x3d-toggle has been installed."

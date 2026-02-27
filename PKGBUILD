@@ -38,8 +38,8 @@ Exec=/usr/bin/x3d-toggle-gui
 Icon=/usr/share/x3d-toggle/ryzen.jpeg
 Terminal=false
 Categories=System;Settings;
-Keywords=amd;x3d;vcache;gaming;llm;encode;streaming;compute;workload;
-X-KDE-Keywords=x3d,vcache,cpu,rabbit,cheetah,llm,encode,streaming,compute,workload
+Keywords=amd;x3d;vcache;gaming;llm;encode;streaming;compute;workload;elk;
+X-KDE-Keywords=x3d,vcache,cpu,rabbit,cheetah,elk,llm,encode,streaming,compute,workload
 EOF
 }
 

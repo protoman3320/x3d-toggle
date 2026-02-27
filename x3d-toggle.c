@@ -72,13 +72,13 @@ unsigned long long get_cpu_stats(unsigned long long *idle) {
     }
     fclose(fp);
 
-    char cpu[5];
     unsigned long long user, nice, system, idle_ticks, iowait, irq, softirq, steal;
     
     user = nice = system = idle_ticks = iowait = irq = softirq = steal = 0;
 
-    sscanf(buffer, "%s %llu %llu %llu %llu %llu %llu %llu %llu", 
-           cpu, &user, &nice, &system, &idle_ticks, &iowait, &irq, &softirq, &steal);
+    // We use %*s to ignore the first token (like "cpu" or "cpu0")
+    sscanf(buffer, "%*s %llu %llu %llu %llu %llu %llu %llu %llu", 
+           &user, &nice, &system, &idle_ticks, &iowait, &irq, &softirq, &steal);
 
     if (idle) *idle = idle_ticks + iowait; 
     
@@ -150,8 +150,18 @@ int apply_mode(const char *mode) {
         return 0;
     }
 
-    fprintf(fp, "%s", mode);
-    fclose(fp);
+    if (fprintf(fp, "%s", mode) < 0) {
+        fprintf(stderr, "Error: Failed to write to %s: %s\n", target_path, strerror(errno));
+        fclose(fp);
+        free(target_path);
+        return 0;
+    }
+    
+    if (fclose(fp) != 0) {
+        fprintf(stderr, "Error: Failed to apply mode (device driver rejected?): %s\n", strerror(errno));
+        free(target_path);
+        return 0;
+    }
     
     printf("Successfully set mode to '%s'.\n", mode);
     free(target_path);
