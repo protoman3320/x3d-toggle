@@ -6,7 +6,7 @@
 #include <ftw.h>
 #include <errno.h>
 
-#define VERSION "1.2.0"
+#define VERSION "1.0.0"
 #define AMD_X3D_MODE_FILENAME "amd_x3d_mode"
 #define SYS_PLATFORM_DIR "/sys/devices/platform"
 
@@ -33,7 +33,6 @@ int check_root() {
     return 1;
 }
 
-// Callback for nftw to find the file
 int find_file_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {
     (void)sb; (void)typeflag; (void)ftwbuf; // Unused
     if (strstr(fpath, AMD_X3D_MODE_FILENAME) != NULL) {
@@ -47,18 +46,12 @@ int find_file_cb(const char *fpath, const struct stat *sb, int typeflag, struct 
     return 0;
 }
 
-// Find the amd_x3d_mode file recursively using nftw
 char *find_x3d_mode_file() {
     found_path = NULL;
-    // nftw returns 0 on success (traversal complete), or -1 on error. 
-    // We stop it early by returning non-zero in callback, so logic is inverted somewhat.
-    // However, relying on the side effect (found_path) is what matters.
     nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS);
     return found_path;
 }
 
-// Helper to read CPU stats from /proc/stat
-// Returns total ticks, updates idle ticks
 unsigned long long get_cpu_stats(unsigned long long *idle) {
     FILE *fp = fopen("/proc/stat", "r");
     if (!fp) return 0;
@@ -70,11 +63,9 @@ unsigned long long get_cpu_stats(unsigned long long *idle) {
     }
     fclose(fp);
 
-    // Format: cpu  user nice system idle iowait irq softirq steal ...
     char cpu[5];
     unsigned long long user, nice, system, idle_ticks, iowait, irq, softirq, steal;
     
-    // Initialize vars to 0 to be safe
     user = nice = system = idle_ticks = iowait = irq = softirq = steal = 0;
 
     sscanf(buffer, "%s %llu %llu %llu %llu %llu %llu %llu %llu", 
@@ -97,7 +88,6 @@ int check_compute_load(int threshold, int sample_ms) {
     unsigned long long total_delta = total2 - total1;
     unsigned long long idle_delta = idle2 - idle1;
     
-    // Avoid division by zero
     if (total_delta == 0) return 0;
 
     unsigned long long usage_pct = (100 * (total_delta - idle_delta)) / total_delta;
@@ -108,13 +98,9 @@ int check_compute_load(int threshold, int sample_ms) {
     return 0; // False
 }
 
-// Implemented via nftw at top of file now
-
-// Read current mode
 int get_mode() {
     char *target_path = find_x3d_mode_file();
     if (!target_path) {
-        // Silent error for get command? Or print "unknown"?
         printf("unknown\n");
         return 1;
     }
@@ -128,7 +114,6 @@ int get_mode() {
 
     char buffer[64];
     if (fgets(buffer, sizeof(buffer), fp)) {
-        // Trim newline
         buffer[strcspn(buffer, "\n")] = 0;
         printf("%s\n", buffer);
     } else {
@@ -140,7 +125,6 @@ int get_mode() {
     return 0;
 }
 
-// Apply the mode
 int apply_mode(const char *mode) {
     if (!check_root()) return 0;
 
@@ -160,8 +144,6 @@ int apply_mode(const char *mode) {
     fprintf(fp, "%s", mode);
     fclose(fp);
     
-    // printf("Successfully set mode to '%s'.\n", mode); // Silence is golden for scripts, or keep verbose?
-    // Keep verbose for CLI user feedback
     printf("Successfully set mode to '%s'.\n", mode);
     free(target_path);
     return 1;
@@ -178,13 +160,11 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    // Check load command - does not require root
     if (strcmp(argv[1], "check-load") == 0) {
         int threshold = 50;
         if (argc > 2) {
             threshold = atoi(argv[2]);
         }
-        // Sample for 200ms
         if (check_compute_load(threshold, 200)) {
             return 0; // Success (Load is high)
         } else {
@@ -192,7 +172,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Get command - does not require root
     if (strcmp(argv[1], "get") == 0) {
         return get_mode();
     }

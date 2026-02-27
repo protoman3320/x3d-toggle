@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#X3D-Control v0.6.4_beta - x3d-control
+#X3D-Control v1.0.0 - x3d-control
 #Copyright (C) 2026 Pyrotiger
 
 notify_user() {

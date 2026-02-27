@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-#X3D-Control v0.6.4_beta - Autonomous Daemon Scheduler
+#X3D-Control v1.0.0 - Autonomous Daemon Scheduler
 #Copyright (C) 2026 Pyrotiger
 
 STEAM_DATA="$HOME/.local/share/Steam/steamapps"
 
-# Check if we can get the mode (implicitly checks hardware availability)
 if ! x3d-toggle-c get &>/dev/null; then
     echo "Error: AMD X3D hardware interface not found. Exiting daemon." >&2
     echo "Check UEFI settings and kernel support for AMD X3D vCache." >&2
@@ -63,14 +62,11 @@ check_gaming_intent() {
 }
 
 check_compute_intent() {
-    # Default to 50% threshold if not set or if set to old float value
     local threshold="${COMPUTE_LOAD_THRESHOLD:-50}"
-    # If threshold contains a dot (e.g. 8.0), convert/default to integer percent
     if [[ "$threshold" == *"."* ]]; then
        threshold=50
     fi
     
-    # Use C binary to check load (returns 0 on high load, 1 on low load)
     if x3d-toggle-c check-load "$threshold"; then
         return 0
     fi
