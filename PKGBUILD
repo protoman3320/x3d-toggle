@@ -1,40 +1,43 @@
-#Maintainer: Pyrotiger
-#X3D-Toggle v1.0.0 - PKGBUILD
-#Copyright (C) 2026 Pyrotiger
+# shellcheck shell=bash disable=SC2034,SC2154
+# Maintainer: Pyrotiger
 
-pkgname=x3d-toggle-git
-pkgver=v1.0.0.r68.g90610bc
+_pkgname=x3d-toggle
+pkgname="${_pkgname}-git"
+pkgver=v1.0.0.r69.gaeba67b
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
 arch=('x86_64')
 url="https://github.com/pyrotiger/x3d-toggle"
 license=('GPL-3.0-only')
 depends=('kdialog' 'polkit' 'libnotify' 'procps-ng')
-optdepends=('gamemode: For GameMode integration' 
+optdepends=('gamemode: For GameMode integration'
             'steam: For Steam game detection' 
             'wine: For Windows game compatibility' 
             'proton: For Steam Play compatibility')
 makedepends=('git')
 options=('!debug')
-provides=("${pkgname%-git}")
-conflicts=("${pkgname%-git}")
-source=("git+https://github.com/pyrotiger/x3d-toggle.git")
+provides=("${_pkgname}")
+conflicts=("${_pkgname}")
+source=("git+${url}.git")
 md5sums=('SKIP')
-##pkgname=x3d-toggle
-##pkgver=1.0.0
-##source=("https://github.com/pyrotiger/x3d-toggle/archive/refs/tags/v${pkgver}.tar.gz")
-##sha256sums=('xxx') # xxx replace with actual values
-
 backup=('etc/x3d-toggle.conf')
 install='x3d-toggle.install'
 
 pkgver() {
-    cd "$srcdir/${pkgname%-git}" || return 1
-    printf "v%s.r%s.g%s" "$(grep -Po 'VERSION "\K[^"]*' x3d-toggle.c)" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+    local version revision commit
+
+    cd "$srcdir/${_pkgname}" || return 1
+
+    version="$(sed -n 's/^#define VERSION "\([^"]*\)"$/\1/p' x3d-toggle.c | head -n1)"
+    [ -n "$version" ] || version="0.0.0"
+
+    revision="$(git rev-list --count HEAD)"
+    commit="$(git rev-parse --short HEAD)"
+    printf 'v%s.r%s.g%s' "$version" "$revision" "$commit"
 }
 
 prepare() {
-    cd "$srcdir/${pkgname%-git}" || return 1
+    cd "$srcdir/${_pkgname}" || return 1
     cat <<EOF > "x3d-toggle-gui.desktop"
 [Desktop Entry]
 Type=Application
@@ -51,13 +54,13 @@ EOF
 }
 
 build() {
-    cd "$srcdir/${pkgname%-git}" || return 1
+    cd "$srcdir/${_pkgname}" || return 1
     make PREFIX=/usr CPPFLAGS="$CPPFLAGS" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 }
 
 package() {
-    cd "$srcdir/${pkgname%-git}" || return 1
-    
+    cd "$srcdir/${_pkgname}" || return 1
+
     install -Dm755 "x3d-toggle-c" "$pkgdir/usr/bin/x3d-toggle-c"
     install -Dm755 "x3d-toggle-gui" "$pkgdir/usr/bin/x3d-toggle-gui"
     install -Dm755 "x3d-daemon" "$pkgdir/usr/bin/x3d-daemon"
