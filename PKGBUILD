@@ -3,8 +3,8 @@
 # Maintainer: Pyrotiger
 
 _pkgname=x3d-toggle
-pkgname="${_pkgname}-git"
-pkgver=v1.0.0
+pkgname="${_pkgname}"
+pkgver=1.0.2
 pkgrel=1
 pkgdesc="AMD 3D V-Cache Technology Toggle Control - Community Edition"
 arch=('x86_64')
@@ -15,30 +15,19 @@ optdepends=('gamemode: For GameMode integration'
             'steam: For Steam game detection' 
             'wine: For Windows game compatibility' 
             'proton: For Steam Play compatibility')
-makedepends=('git')
+# Removed makedepends on git as we use a release tarball now
 options=('!debug')
 provides=("${_pkgname}")
-conflicts=("${_pkgname}")
-source=("git+${url}.git")
-md5sums=('SKIP')
+conflicts=("${_pkgname}" "${_pkgname}-git")
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('71e6e5a720488265a2d5bf0fb0ba19d302e58fae7083072dbe9e615069a3fdc0')
 backup=('etc/x3d-toggle.conf')
 install='x3d-toggle.install'
 
-pkgver() {
-    local version revision commit
-
-    cd "$srcdir/${_pkgname}" || return 1
-
-    version="$(sed -n 's/^#define VERSION "\([^"]*\)"$/\1/p' x3d-toggle.c | head -n1)"
-    [ -n "$version" ] || version="0.0.0"
-
-    revision="$(git rev-list --count HEAD)"
-    commit="$(git rev-parse --short HEAD)"
-    printf 'v%s.r%s.g%s' "$version" "$revision" "$commit"
-}
+# Removed pkgver() since we use fixed versions for release packages
 
 prepare() {
-    cd "$srcdir/${_pkgname}" || return 1
+    cd "$srcdir/${_pkgname}-${pkgver}" || return 1
     cat <<EOF > "x3d-toggle-gui.desktop"
 [Desktop Entry]
 Type=Application
@@ -55,20 +44,14 @@ EOF
 }
 
 build() {
-    cd "$srcdir/${_pkgname}" || return 1
+    cd "$srcdir/${_pkgname}-${pkgver}" || return 1
     make PREFIX=/usr CPPFLAGS="$CPPFLAGS" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
 }
 
 package() {
-    cd "$srcdir/${_pkgname}" || return 1
+    cd "$srcdir/${_pkgname}-${pkgver}" || return 1
 
-    install -Dm755 "x3d-toggle-c" "$pkgdir/usr/bin/x3d-toggle-c"
-    install -Dm755 "x3d-toggle-gui" "$pkgdir/usr/bin/x3d-toggle-gui"
-    install -Dm755 "x3d-daemon" "$pkgdir/usr/bin/x3d-daemon"
-    install -Dm644 "assets/ryzen.jpeg" "$pkgdir/usr/share/x3d-toggle/ryzen.jpeg"
-    install -Dm644 "org.x3dtoggle.policy" "$pkgdir/usr/share/polkit-1/actions/org.x3dtoggle.policy"
-    install -Dm644 "x3d-toggle.conf" "$pkgdir/etc/x3d-toggle.conf"
-    install -Dm644 "x3d-auto.service" "$pkgdir/usr/lib/systemd/user/x3d-auto.service"
-    install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    # Utilize Makefile for logically sound installation
+    make DESTDIR="$pkgdir" PREFIX=/usr install
     install -Dm644 "x3d-toggle-gui.desktop" "$pkgdir/usr/share/applications/x3d-toggle-gui.desktop"
 }

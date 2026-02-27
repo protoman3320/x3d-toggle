@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#X3D-Toggle v1.0.0 - x3d-toggle-gui
+#X3D-Toggle v1.0.2 - x3d-toggle-gui
 #Copyright (C) 2026 Pyrotiger
 
 notify_user() {
@@ -18,12 +18,12 @@ if ! command -v kdialog &> /dev/null; then
     exit 1
 fi
 
-if ! x3d-toggle-c get &>/dev/null; then
+if ! x3d-toggle get &>/dev/null; then
     kdialog --error "AMD X3D vCache interface not found. Check UEFI/Kernel settings or ensure you have a compatible X3D CPU."
     exit 1
 fi
 
-CURRENT_MODE=$(x3d-toggle-c get 2>/dev/null)
+CURRENT_MODE=$(x3d-toggle get 2>/dev/null)
 if [ -z "$CURRENT_MODE" ]; then
     CURRENT_MODE="unknown"
 fi
@@ -70,7 +70,7 @@ case "$RAW_CHOICE" in
         ;;
 esac
 
-pkexec /usr/bin/x3d-toggle-c "$MODE"
+pkexec /usr/bin/x3d-toggle "$MODE"
 EXIT_STATUS=$?
 
 if [ $EXIT_STATUS -eq 0 ]; then

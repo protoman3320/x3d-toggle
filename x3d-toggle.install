@@ -1,6 +1,6 @@
 post_install() {
     echo ""
-    echo ":: x3d-toggle-git has been installed."
+    echo ":: x3d-toggle has been installed."
     echo "   To enable the automatic CCD scheduler daemon for your user, run:"
     echo "     systemctl --user enable --now x3d-auto.service"
     echo ""

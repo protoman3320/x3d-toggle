@@ -6,14 +6,14 @@
 #include <ftw.h>
 #include <errno.h>
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.2"
 #define AMD_X3D_MODE_FILENAME "amd_x3d_mode"
 #define SYS_PLATFORM_DIR "/sys/devices/platform"
 
 static char *found_path = NULL;
 
 void print_usage(const char *prog_name) {
-    printf("x3d-toggle-c v%s\n", VERSION);
+    printf("x3d-toggle v%s\n", VERSION);
     printf("Usage: %s <command> [args]\n", prog_name);
     printf("Commands:\n");
     printf("  cache        Enable 3D V-Cache preference (Rabbit Mode)\n");
@@ -34,24 +34,31 @@ int check_root() {
 }
 
 int find_file_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {
-    (void)sb; (void)typeflag; (void)ftwbuf; // Unused
-    if (strstr(fpath, AMD_X3D_MODE_FILENAME) != NULL) {
-        // Double check filename match exactly at the end
-        const char *filename = strrchr(fpath, '/');
-        if (filename && strcmp(filename + 1, AMD_X3D_MODE_FILENAME) == 0) {
-            found_path = strdup(fpath);
-            return 1; // Stop searching
-        }
+    (void)sb; // Unused
+    
+    // Only process regular files
+    if (typeflag != FTW_F) {
+        return 0;
+    }
+
+    // ftwbuf->base is the offset of the filename in fpath
+    const char *filename = fpath + ftwbuf->base;
+    
+    if (strcmp(filename, AMD_X3D_MODE_FILENAME) == 0) {
+        found_path = strdup(fpath);
+        return 1; // Stop searching
     }
     return 0;
 }
 
 char *find_x3d_mode_file() {
     found_path = NULL;
-    if (nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS) == -1) {
-        return NULL;
+    // Walk the directory. Return 1 implies we found the file and stopped early.
+    int ret = nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS);
+    if (ret == 1) {
+        return found_path;
     }
-    return found_path;
+    return NULL;
 }
 
 unsigned long long get_cpu_stats(unsigned long long *idle) {

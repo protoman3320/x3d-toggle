@@ -1,7 +1,7 @@
 # Contributing to X3D-Toggle
 
 ## 1. Architectural Objective
-Contributions must integrate seamlessly with the established PolicyKit (Polkit) security framework. Hardware state modifications are now handled by the **C binary** (`x3d-toggle-c`).
+Contributions must integrate seamlessly with the established PolicyKit (Polkit) security framework. Hardware state modifications are now handled by the **C binary** (`x3d-toggle`).
 
 ## 2. Development & Testing
 * **Target Hardware:** AMD Ryzen 7000/9000 X3D series.

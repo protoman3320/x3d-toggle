@@ -1,11 +1,11 @@
 # x3d-toggle (C Implementation)
-### X3D-Toggle v1.0.0 - README.md
+### X3D-Toggle v1.0.2 - README.md
 ### Copyright ©️ 2026 Pyrotiger
 
 ## AMD 3D v-Cache Technology Toggle Control - Community Edition
 A portable, high-performance utility for managing CCD priority on the AMD Ryzen X3D CPUs utilizing vCache technology under Linux via manual control or automated daemon.
 
-**Now refactored into a high-performance C binary (`x3d-toggle-c`) for minimal overhead.**
+**Now refactored into a high-performance C binary (`x3d-toggle`) for minimal overhead.**
 
 ### 🔭  Overview  🔭
 This utility provides a graphical interface and automation to the `amd-x3d-vcache` kernel driver. It allows for real-time switching of the CPU scheduler bias to optimize for specific workloads on asymmetric dual-CCD processors (like 7950X3D/9950X3D).
@@ -25,7 +25,7 @@ This utility provides a graphical interface and automation to the `amd-x3d-vcach
 
 ### 🛡️  Architecture Security   🛡️
 The utility interfaces with the sysfs node at `/sys/devices/platform/AMDI*/amd_x3d_mode` via PolicyKit.
-* **C Binary**: Hardware writes are handled by `x3d-toggle-c` (installed to `/usr/bin`).
+* **C Binary**: Hardware writes are handled by `x3d-toggle` (installed to `/usr/bin`).
 * **Polkit**: Actions are authorized via `org.x3dtoggle.policy`.
 
 ### 📦  Installation  📦
@@ -48,12 +48,12 @@ sudo make install
 ### 🎮 Usage 🎮
 
 #### Command Line
-The core logic is handled by `x3d-toggle-c`:
+The core logic is handled by `x3d-toggle`:
 ```bash
-sudo x3d-toggle-c cache       # Rabbit Mode (Gaming) 🐰
-sudo x3d-toggle-c frequency   # Cheetah Mode (Compute) 🐆
-sudo x3d-toggle-c auto        # Elk Mode (Driver Default) 🦌
-x3d-toggle-c get              # Check current mode 🔎
+sudo x3d-toggle cache       # Rabbit Mode (Gaming) 🐰
+sudo x3d-toggle frequency   # Cheetah Mode (Compute) 🐆
+sudo x3d-toggle auto        # Elk Mode (Driver Default) 🦌
+x3d-toggle get              # Check current mode 🔎
 ```
 
 #### GUI Control

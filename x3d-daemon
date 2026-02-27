@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#X3D-Toggle v1.0.0 - Autonomous Daemon Scheduler
+#X3D-Toggle v1.0.2 - Autonomous Daemon Scheduler
 #Copyright (C) 2026 Pyrotiger
 
 STEAM_DATA="$HOME/.local/share/Steam/steamapps"
 
-if ! x3d-toggle-c get &>/dev/null; then
+if ! x3d-toggle get &>/dev/null; then
     echo "Error: AMD X3D hardware interface not found. Exiting daemon." >&2
     echo "Check UEFI settings and kernel support for AMD X3D vCache." >&2
     exit 1
@@ -85,7 +85,7 @@ check_gaming_intent() {
 check_compute_intent() {
     local threshold="${COMPUTE_LOAD_THRESHOLD:-50}"
     
-    if x3d-toggle-c check-load "$threshold"; then
+    if x3d-toggle check-load "$threshold"; then
         return 0
     fi
     return 1
@@ -109,9 +109,9 @@ while true; do
         NEW_MODE="auto"
     fi
 
-    CURRENT=$(x3d-toggle-c get 2>/dev/null)
+    CURRENT=$(x3d-toggle get 2>/dev/null)
     if [[ "$CURRENT" != "$NEW_MODE" ]]; then
-        if ! pkexec /usr/bin/x3d-toggle-c "$NEW_MODE" 2>/dev/null; then
+        if ! pkexec /usr/bin/x3d-toggle "$NEW_MODE" 2>/dev/null; then
             NOW=$(date +%s)
             if (( NOW - LAST_ERROR_TIME > ERROR_COOLDOWN )); then
                 if command -v notify-send &> /dev/null; then
