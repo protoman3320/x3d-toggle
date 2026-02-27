@@ -96,6 +96,8 @@ cd to /path/to/folder/x3d-toggle
 chmod +x uninstall.sh
 sudo ./uninstall.sh
 ```
+### 🤝  Credits & Acknowledgments  🤝
+GrandBIRDLizard — For critical technical insights on sysfs node utilization, GPU IRQ management, and architectural guidance on shifting from loadavg to high-performance event-driven logic. Author of [X3Dctl](https://github.com/GrandBIRDLizard/x3dctl).
 
 ### ⚖️  Legal Disclaimer & Liability Limitation  ⚖️
 
