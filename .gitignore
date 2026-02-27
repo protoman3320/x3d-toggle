@@ -2,3 +2,6 @@ x3d-toggle-c
 pkg/
 src/
 *.pkg.tar.zst
+*.pkg.tar.*
+*.pkg.tar.*.sig
+x3d-toggle/
