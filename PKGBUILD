@@ -19,7 +19,7 @@ options=('!debug')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}" "${_pkgname}-git")
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
-sha256sums=('d21a676688d1baf8fc82cdd92b908e986ea7256520efd669ea7d7283d8afdddc')
+sha256sums=('d8bac4df0e10a607ff34c4ba4cf1867b05a5265934991e0ec0b7d9886664e3c3')
 backup=('etc/x3d-toggle.conf')
 install='x3d-toggle.install'
 
@@ -32,7 +32,7 @@ Name=X3D CCD Toggle
 GenericName=AMD 3D v-Cache Technology Mode Switcher
 Comment=Toggle between Rabbit (Cache) and Cheetah (Frequency) modes
 Exec=/usr/bin/x3d-toggle-gui
-Icon=x3d-toggle
+Icon=/usr/share/icons/hicolor/256x256/apps/x3d-toggle.png
 Terminal=false
 Categories=System;Settings;
 Keywords=amd;x3d;vcache;gaming;llm;encode;streaming;compute;workload;elk;

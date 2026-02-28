@@ -97,8 +97,8 @@ x3d-toggle check-load <threshold>     # Performant C check against load % 🧠
 
 ### ⚙️  Customizations  ⚙️
 *  To change the notification icon, replace the existing asset:
-   *  Path: /usr/share/x3d-toggle/ryzen.jpeg
-   *  Requirement: Image must be named ryzen.jpeg and in jpeg format
+   *  Path: /usr/share/x3d-toggle/ryzen.png
+   *  Requirement: Image must be named ryzen.png and in png format
 
 ### 🚮  Uninstallation  🚮
 To uninstall all binaries and assets, run the following:

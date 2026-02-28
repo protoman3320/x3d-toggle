@@ -4,7 +4,7 @@
 
 notify_user() {
     if command -v notify-send &> /dev/null; then
-        notify-send "$@" 2>/dev/null
+        notify-send -a "X3D Toggle" "$@" 2>/dev/null
     else
         echo "[Notification] $*" >> "${HOME}/.x3d-toggle.log" 2>/dev/null
     fi
@@ -58,7 +58,6 @@ RAW_CHOICE=$(kdialog --title "AMD X3D VCACHE Technology Control" --radiolist \
 case "$RAW_CHOICE" in
     "cache"|"frequency"|"auto")
         MODE="$RAW_CHOICE"
-        # Pause automation daemon during manual override
         if systemctl --user is-active --quiet "$SERVICE_NAME"; then
             systemctl --user stop "$SERVICE_NAME"
             notify_user "X3D Toggle" "Manual $MODE override engaged. Automation Daemon paused."
@@ -75,11 +74,11 @@ pkexec /usr/bin/x3d-toggle "$MODE"
 EXIT_STATUS=$?
 
 if [ $EXIT_STATUS -eq 0 ]; then
-    ICON_PATH="/usr/share/x3d-toggle/ryzen.jpeg"
-    DISPLAY_ICON=$([ -f "$ICON_PATH" ] && echo "file://$ICON_PATH" || echo "cpu")
+    ICON_PATH="/usr/share/icons/hicolor/256x256/apps/x3d-toggle.png"
+    DISPLAY_ICON=$([ -f "$ICON_PATH" ] && echo "$ICON_PATH" || echo "cpu")
 
     if command -v notify-send &> /dev/null; then
-        notify-send -i "$DISPLAY_ICON" "AMD X3D VCACHE Technology: ${MODE^^}" "Hardware Mode Engaged."
+        notify-send -a "X3D Toggle" -i "$DISPLAY_ICON" "AMD X3D VCACHE Technology: ${MODE^^}" "Hardware Mode Engaged."
     else
         kdialog --information "Mode switched to: ${MODE^^}" --title "AMD X3D VCACHE Technology"
     fi

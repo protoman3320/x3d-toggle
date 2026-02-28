@@ -115,7 +115,7 @@ while true; do
             NOW=$(date +%s)
             if (( NOW - LAST_ERROR_TIME > ERROR_COOLDOWN )); then
                 if command -v notify-send &> /dev/null; then
-                    notify-send "X3D Control Error" "<font color='#ff6d00'>Critical: Failed to switch to $NEW_MODE.</font>" 2>/dev/null
+                    notify-send -a "X3D Toggle" "X3D Control Error" "<font color='#ff6d00'>Critical: Failed to switch to $NEW_MODE.</font>" 2>/dev/null
                 fi
                 LAST_ERROR_TIME=$NOW
             fi
