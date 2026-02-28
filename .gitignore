@@ -7,3 +7,4 @@ src/
 x3d-toggle/
 .vscode/
 x3d-toggle
+*.gz
