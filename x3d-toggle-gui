@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#X3D-Toggle v1.0.3 - x3d-toggle-gui
+#X3D-Toggle v1.0.4 - x3d-toggle-gui
 #Copyright (C) 2026 Pyrotiger
 
 notify_user() {

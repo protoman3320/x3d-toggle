@@ -1,11 +1,9 @@
 # x3d-toggle (C Implementation)
-### X3D-Toggle v1.0.3 - README.md
-### Copyright ©️ 2026 Pyrotiger
+### X3D-Toggle v1.0.4 - README.md
+### Copyright ©️ 2026 Pyrotiger - License: GPLv3
 
 ## AMD 3D v-Cache Technology Toggle Control - Community Edition
 A portable, high-performance utility for managing CCD priority on the AMD Ryzen X3D CPUs utilizing vCache technology under Linux via manual control or automated daemon.
-
-**Now refactored into a high-performance C binary (`x3d-toggle`) for minimal overhead.**
 
 ### 🔭  Overview  🔭
 This utility provides a graphical interface and automation to the `amd-x3d-vcache` kernel driver. It allows for real-time switching of the CPU scheduler bias to optimize for specific workloads on asymmetric dual-CCD processors (like 7950X3D/9950X3D).
@@ -14,7 +12,7 @@ This utility provides a graphical interface and automation to the `amd-x3d-vcach
   Current CPPC drivers often fail to switch states deterministically, leading to micro-stutters.
 
 * The Solution: x3d-toggle
-  * **C Binary Backend**: The core logic is now a compiled C binary for instant execution and minimal system overhead.
+  * **C Binary Backend**: The core logic is now a compiled C binary for instant execution and minimal system overhead. Sysfs node detection uses POSIX `glob()` for real-time latency reduction.
   * **Automated Daemon**: Real-time heuristics detect "Gaming" vs "Compute" loads.
   * **Manual Modes**: Instant user-defined priority via GUI or CLI.
 
@@ -23,7 +21,7 @@ This utility provides a graphical interface and automation to the `amd-x3d-vcach
 * System Dependencies: `kdialog` (GUI), `polkit`, `libnotify`.
 * Build Dependencies: `gcc`, `make`.
 
-### 🛡️  Architecture Security   🛡️
+### 🛡️  Architecture Security  🛡️
 The utility interfaces with the sysfs node at `/sys/devices/platform/AMDI*/amd_x3d_mode` via PolicyKit.
 * **C Binary**: Hardware writes are handled by `x3d-toggle` (installed to `/usr/bin`).
 * **Polkit**: Actions are authorized via `org.x3dtoggle.policy`.
@@ -33,7 +31,6 @@ The utility interfaces with the sysfs node at `/sys/devices/platform/AMDI*/amd_x
 #### 1. Arch Linux / Garuda (via Pre-compiled Pacman Package)
 If you download the compiled Arch package directly from the **Releases** page (`.pkg.tar.zst`), you can install it seamlessly using `pacman` without needing to compile it yourself:
 ```bash
-# Enter the folder where you downloaded the release file:
 cd ~/Downloads/
 sudo pacman -U x3d-toggle-*.pkg.tar.zst
 ```
@@ -49,14 +46,13 @@ makepkg -si
 #### 3. Manual Build (Make - Debian/Fedora/Ubuntu/Etc)
 If you are running a non-Arch distro without `pacman` or `makepkg`:
 ```bash
-# Download the source archive or run git clone
 git clone https://github.com/pyrotiger/x3d-toggle.git
 cd x3d-toggle
 make
 sudo make install
 ```
 
-### 🎮 Application Usage 🎮
+### 🎮  Application Usage  🎮
 
 * Launch the GUI/Interface via your application launcher (search for "X3D CCD Control") or execute via terminal:
   ```bash
@@ -68,46 +64,42 @@ sudo make install
   cp /usr/share/applications/x3d-toggle-gui.desktop ~/Desktop/ && chmod +x ~/Desktop/x3d-toggle-gui.desktop
   ```
 
-### ⚙️ Background Daemon & Utilities ⚙️
+### ⚙️  Background Daemon & Utilities  ⚙️
 
-#### Automated Scheduling Service
+#### Automated Scheduling Service 🎹
 Enable the user service to allow the background daemon to dynamically switch your system between Cache and Frequency profiles based on live workloads:
 ```bash
 systemctl --user enable --now x3d-auto.service
 ```
 
-#### Configuration Overrides
+#### Configuration Overrides  🔧
 To fine-tune the daemon's behavior, edit the configuration file `/etc/x3d-toggle.conf` (Requires `sudo` to edit):
-*  **Poll Interval:** Adjust how frequently the daemon checks for state changes (Default: 3s).
-*  **Compute Threshold:** Set the CPU usage percentage required to trigger Frequency mode (Default: 50%).
+*  **POLL_INTERVAL:** Adjust how frequently the daemon checks for state changes in seconds (Default: 3).
+*  **COMPUTE_LOAD_THRESHOLD:** Set the CPU usage percentage required to trigger Cheetah/Frequency mode (Default: 50).
+*  **GAME_DETECTION_MODE:** Select the method used to detect Gaming/Rabbit mode intent (Default: 2).
+   *  Mode `1`: Simplified legacy detection (Gamemoded + Steam).
+   *  Mode `2`: Advanced dynamic detection. Caches your installed application metadata (`.desktop` fields) and continually matches it against `top` resource utilization and steam usage.
+
 *  **Note:** After editing, restart the daemon to apply changes:
    ```bash
    systemctl --user restart x3d-auto
    ```
 
-#### CLI Administration Commands
+#### CLI Administrative Commands ⌨
 The core `sysfs` writes are handled silently by the `x3d-toggle` compiled C binary. You can run checks manually:
 ```bash
-sudo x3d-toggle cache       # Rabbit Mode (Gaming) 🐰
-sudo x3d-toggle frequency   # Cheetah Mode (Compute) 🐆
-sudo x3d-toggle auto        # Elk Mode (Driver Default) 🦌
-x3d-toggle get              # Check current active hardware mode 🔎
+sudo x3d-toggle cache                 # Rabbit Mode (Gaming) 🐰
+sudo x3d-toggle frequency             # Cheetah Mode (Compute) 🐆
+sudo x3d-toggle auto                  # Elk Mode (Driver Default) 🦌
+x3d-toggle get                        # Check current active hardware mode 🔎
+x3d-toggle check-load <threshold>     # Performant C check against load % 🧠
 ```
 
-### ⚖️ License ⚖️
-GPLv3
 ### ⚙️  Customizations  ⚙️
 *  To change the notification icon, replace the existing asset:
    *  Path: /usr/share/x3d-toggle/ryzen.jpeg
    *  Requirement: Image must be named ryzen.jpeg and in jpeg format
-*  To fine-tune the daemon's behavior, edit the configuration file:
-   *  Path: /etc/x3d-toggle.conf (Requires sudo/root to edit)
-   *  **Poll Interval:** Adjust how frequently the daemon checks for state changes (Default: 3s).
-   *  **Compute Threshold:** Set the load average required to trigger Frequency/Cheetah mode (Default: 8.0).
-   *  **Note:** After editing, restart the daemon to apply changes:
-      ```bash
-      systemctl --user restart x3d-auto
-      ```
+
 ### 🚮  Uninstallation  🚮
 To uninstall all binaries and assets, run the following:
 

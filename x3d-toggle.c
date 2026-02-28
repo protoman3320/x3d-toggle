@@ -3,14 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <ftw.h>
+#include <glob.h>
 #include <errno.h>
 
-#define VERSION "1.0.3"
-#define AMD_X3D_MODE_FILENAME "amd_x3d_mode"
-#define SYS_PLATFORM_DIR "/sys/devices/platform"
-
-static char *found_path = NULL;
+#define VERSION "1.0.4"
+#define AMD_X3D_MODE_GLOB "/sys/devices/platform/AMDI*/amd_x3d_mode"
 
 void print_usage(const char *prog_name) {
     printf("x3d-toggle v%s\n", VERSION);
@@ -33,32 +30,19 @@ int check_root() {
     return 1;
 }
 
-int find_file_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf) {
-    (void)sb; // Unused
-    
-    // Only process regular files
-    if (typeflag != FTW_F) {
-        return 0;
-    }
-
-    // ftwbuf->base is the offset of the filename in fpath
-    const char *filename = fpath + ftwbuf->base;
-    
-    if (strcmp(filename, AMD_X3D_MODE_FILENAME) == 0) {
-        found_path = strdup(fpath);
-        return 1; // Stop searching
-    }
-    return 0;
-}
-
 char *find_x3d_mode_file() {
-    found_path = NULL;
-    // Walk the directory. Return 1 implies we found the file and stopped early.
-    int ret = nftw(SYS_PLATFORM_DIR, find_file_cb, 20, FTW_PHYS);
-    if (ret == 1) {
-        return found_path;
+    glob_t globbuf;
+    char *result_path = NULL;
+
+    // Use GLOB_NOSORT. It directly returns the matched files quickly
+    if (glob(AMD_X3D_MODE_GLOB, GLOB_NOSORT, NULL, &globbuf) == 0) {
+        if (globbuf.gl_pathc > 0) {
+            result_path = strdup(globbuf.gl_pathv[0]);
+        }
     }
-    return NULL;
+    globfree(&globbuf);
+    
+    return result_path;
 }
 
 unsigned long long get_cpu_stats(unsigned long long *idle) {
@@ -139,7 +123,7 @@ int apply_mode(const char *mode) {
 
     char *target_path = find_x3d_mode_file();
     if (!target_path) {
-        fprintf(stderr, "Error: Could not find %s file in %s\n", AMD_X3D_MODE_FILENAME, SYS_PLATFORM_DIR);
+        fprintf(stderr, "Error: Could not find sysfs node at %s\n", AMD_X3D_MODE_GLOB);
         return 0;
     }
 
