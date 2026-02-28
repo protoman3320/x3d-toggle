@@ -8,7 +8,7 @@ This update focuses on surgical bug fixes, refining the underlying system heuris
 * **Daemon Hierarchy Overrides:** Manually selecting an execution state via the physical GUI dialogue menu now triggers `systemctl --user stop x3d-auto`, actively pausing the invisible monitoring daemon preventing aggressive recursive CPU state wrestling. 
 
 ## 🎨 UI & Environment Layout 
-* **KDE / kdialog Grid Parsing:** Eliminated arbitrary parameters (`0 0 0`) from the radiolist syntax fixing a critical cosmetic GUI parser issue resulting in an orphaned numerical '0' row in KDE Plasma 6+.
+* **KDE / kdialog Grid Parsing:** Eliminated arbitrary parameters (`0 0 0`) from the kdiag syntax fixing a critical cosmetic GUI parser issue resulting in an orphaned numerical '0' row in KDE Plasma 6+.
 * **Freedesktop Standard Desktop Icons:** Redesigned `.desktop` execution to natively request the icon via global path associations standardizing icon display structures. Application menus, taskbars, and custom shortcuts now resolve visuals flawlessly without explicit layout pathing errors.
 
 ## 📦 Packaging Polish
