@@ -1,6 +1,6 @@
 # v1.0.4 - Performance Optimization Update 🚀
   
-*   **Path Resolution Upgrade:** Transitioned the `x3d-toggle` compiled C backend from using the heavy directory walker (`nftw`) to a lean `glob()` implementation. This change removes overhead latency when scanning `/sys/devices/platform` directories for the `amd_x3d_mode` kernel node, significantly cutting execution time for sysfs writes and hardware reads.
+*   **Path Resolution Upgrade:** Transitioned the `x3d-toggle` compiled C backend from using (`nftw`) to `glob()` implementation. This change removes overhead latency when scanning `/sys/devices/platform` directories for the `amd_x3d_mode` kernel node, significantly cutting execution time for sysfs writes and hardware reads.
 
 # v1.0.3 - System Precision & UI Polish Release 🚀
 
